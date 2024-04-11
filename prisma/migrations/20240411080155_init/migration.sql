@@ -13,10 +13,10 @@ CREATE TABLE "Paint" (
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "supplierInfo" TEXT NOT NULL,
-    "orderDate" TIMESTAMP(3) NOT NULL,
+    "orderDate" TEXT NOT NULL,
     "ean_gtin" TEXT NOT NULL,
     "batchName" TEXT NOT NULL,
-    "bestBeforeDate" TIMESTAMP(3) NOT NULL,
+    "bestBeforeDate" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "Paint_pkey" PRIMARY KEY ("id")
