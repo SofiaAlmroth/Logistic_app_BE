@@ -19,3 +19,23 @@ model User {
   email    String @unique
   password String
 }
+
+model Category {
+  id     String  @id @default(cuid())
+  name   String
+  paints Paint[]
+}
+
+model Paint {
+  id             String   @id @default(cuid())
+  name           String
+  category       Category @relation(fields: [categoryId], references: [id])
+  quantity       Int
+  price          Float
+  supplierInfo   String
+  orderDate      DateTime
+  ean_gtin       String
+  batchName      String
+  bestBeforeDate DateTime
+  categoryId     String
+}
