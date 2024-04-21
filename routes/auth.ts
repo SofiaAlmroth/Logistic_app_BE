@@ -7,6 +7,18 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 const router = express.Router();
 
+router.get("/:id", async (req, res) => {
+  const user = await prisma.user.findFirst({
+    where: { email: req.body.email },
+  });
+
+  const { ...userWithoutPassword } = user;
+
+  const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET!);
+
+  return res.send(token);
+});
+
 router.post("/", async (req, res) => {
   const validation = validate(req.body);
 
