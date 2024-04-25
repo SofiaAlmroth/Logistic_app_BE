@@ -7,6 +7,11 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  const users = await prisma.user.findMany();
+  return res.send(users);
+});
+
 router.post("/", async (req, res) => {
   const validation = validate(req.body);
 
