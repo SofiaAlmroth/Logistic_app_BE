@@ -15,4 +15,18 @@ router.get("/", async (req, res) => {
   return res.send(ordersWithQuantity);
 });
 
+// router.post("/", async (req, res) => {
+//   const category = await prisma.category.findFirst({
+//     where: { id: req.body.categoryId },
+//   });
+
+//   if (!category)
+//     res.status(404).send("The category with the given id was not found");
+
+//   const order = await prisma.order.create({
+//     data: { rows: req.body.paint },
+//   });
+//   return res.status(201).send(order);
+// });
+
 export default router;

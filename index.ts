@@ -21,33 +21,47 @@ app.use("/api/orders", orders);
 app.listen(5999, () => console.log("listening on port 5999..."));
 
 //GET Orders
-// async function createOrder(status: string) {
-//   const order = await prisma.order.create({ data: { rows: {} } });
+// async function createOrder() {
+//   const order = await prisma.order.create({});
 //   console.log("order created", order);
 //   return order;
 // }
 
-// createOrder("pending");
-// createOrder("pending");
-// createOrder("pending");
+// createOrder();
+
+// function date() {
+//   const bestBeforeDate = new Date();
+//   bestBeforeDate.setFullYear(bestBeforeDate.getFullYear() + 2);
+//   console.log(bestBeforeDate);
+// }
+
+// date();
 
 //GET Paints
 // async function createPaint() {
 //   const paint = await prisma.paint.create({
-// data: {
-//   name: "Whispering Willow",
-//   quantity: 12,
-//   price: 90,
-//   bestBeforeDate:
-//   supplierInfo: "Supplier ABC",
-//   categoryId: "cluv0y3wc000314hseodhmjn2",
-// },
+//     data: {
+//       name: "Whispering Willow",
+//       quantity: 12,
+//       price: 90,
+//       bestBeforeDate: "2026-04-26T09:17:48.725Z",
+//       supplierInfo: "Supplier ABC",
+//       categoryId: "clvgel9jh0007xnflxkp7tobh",
+//     },
 //   });
 //   console.log(paint);
 // }
 
 // createPaint();
 
+// model Paint {
+//     name           String
+//     quantity       Int
+//     price          Float
+//     supplierInfo   String
+//     bestBeforeDate DateTime
+//     categoryId     String
+//   }
 // //GET Categories
 // async function createCategory(name: string) {
 //   const category = await prisma.category.create({ data: { name } });
