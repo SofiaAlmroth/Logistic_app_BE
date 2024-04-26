@@ -15,8 +15,18 @@ const schema = z.object({
     .min(5, { message: "Password is too short" }),
 });
 
+const updateSchema = z.object({
+  name: z.string().min(3, { message: "Name is too short" }).optional(),
+  email: z.string().email({ message: "Invalid email" }).optional(),
+  password: z.string().optional(),
+});
+
 type FormData = z.infer<typeof schema>;
 
 export function validate(body: FormData) {
   return schema.safeParse(body);
+}
+
+export function validateUpdatedUser(body: FormData) {
+  return updateSchema.safeParse(body);
 }
