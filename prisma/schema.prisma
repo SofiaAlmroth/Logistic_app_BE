@@ -39,6 +39,7 @@ model Paint {
   categoryId     String
   Order          Order?   @relation(fields: [orderId], references: [id])
   orderId        String?
+  isReceived     Boolean  @default(false)
 }
 
 model Order {

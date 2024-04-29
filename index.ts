@@ -41,12 +41,12 @@ app.listen(5999, () => console.log("listening on port 5999..."));
 // async function createPaint() {
 //   const paint = await prisma.paint.create({
 //     data: {
-//       name: "Whispering Willow",
-//       quantity: 12,
-//       price: 90,
+//       name: "Emerald Enchantment",
+//       quantity: 125,
+//       price: 125,
 //       bestBeforeDate: "2026-04-26T09:17:48.725Z",
-//       supplierInfo: "Supplier ABC",
-//       categoryId: "clvgel9jh0007xnflxkp7tobh",
+//       supplierInfo: "Supplier JKL",
+//       categoryId: "clvgel9ji000bxnfl7nrcsn2p",
 //     },
 //   });
 //   console.log(paint);
