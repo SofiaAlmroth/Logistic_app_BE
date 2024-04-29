@@ -67,6 +67,7 @@ router.put("/:id", async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password,
+      isAdmin: req.body.isAdmin,
     },
   });
 
