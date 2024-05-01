@@ -1,5 +1,5 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { Paint, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -17,13 +17,22 @@ router.get("/", async (req, res) => {
   return res.send(ordersWithQuantity);
 });
 
-interface Paint {
-  name: string;
-  quantity: number;
-  price: number;
-  supplierInfo: string;
-  categoryId: string;
-}
+router.get("/:id", async (req, res) => {
+  const order = await prisma.order.findFirst({
+    where: { id: req.params.id },
+    include: { rows: { include: { category: true } } },
+  });
+
+  if (!order)
+    return res.status(404).send("The order with the given id was not found");
+
+  const orderWithQuantity = {
+    ...order,
+    totalQuantity: order.rows.length,
+  };
+
+  return res.send(orderWithQuantity);
+});
 
 router.post("/", async (req, res) => {
   const { rows } = req.body;
@@ -61,44 +70,47 @@ router.post("/", async (req, res) => {
   return res.status(201).send(order);
 });
 
-// router.put("/:id", async (req, res) => {
-//   const order = await prisma.order.findFirst({
-//     where: { id: req.params.id },
-//   });
-//   if (!order)
-//     return res.status(404).send("The order with the gived id was not found");
+router.put("/:id", async (req, res) => {
+  const { status } = req.body;
+  const order = await prisma.order.findFirst({
+    where: { id: req.params.id },
+    include: { rows: true },
+  });
+  if (!order)
+    return res.status(404).send("The order with the gived id was not found");
 
-//   const { rows } = req.body;
+  const rowIds = order.rows.map((row: Paint) => row.id);
 
-//   await prisma.order.update({
-//     where: { id: req.params.id },
-//     data: { status: "RECEIVED" },
-//   });
+  await prisma.order.update({
+    where: { id: req.params.id },
+    data: {
+      status: status,
+      rows: {
+        updateMany: {
+          where: { id: { in: rowIds } },
+          data: { isReceived: status === "RECEIVED" },
+        },
+      },
+    },
+  });
 
-//   for (const paint of rows) {
-//     await prisma.paint.update({
-//       where: { id: paint.id },
-//       data: { isReceived: true },
-//     });
-//   }
-//   //  await prisma.order.update({
-//   //     where: { id: req.params.id },
-//   //     data: {
-//   //       status: "RECEIVED",
-//   //       rows: {
-//   //         updateMany: {
-//   //           where: { id: { in: rows.id } },
-//   //           data: { isReceived: true },
-//   //         },
-//   //       },
-//   //     },
-//   //   });
+  const updatedOrder = await prisma.order.findFirst({
+    where: { id: req.params.id },
+  });
 
-//   const updatedOrder = await prisma.order.findFirst({
-//     where: { id: req.params.id },
-//   });
-
-//   return res.send(updatedOrder);
-// });
+  return res.send(updatedOrder);
+});
 
 export default router;
+
+// await prisma.order.update({
+//   where: { id: req.params.id },
+//   data: { status: req.body },
+// });
+
+// for (const paint of rows) {
+//   await prisma.paint.update({
+//     where: { id: paint.id },
+//     data: { isReceived: true },
+//   });
+// }

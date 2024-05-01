@@ -7,7 +7,7 @@ const router = express.Router();
 //Hämta alla paints
 router.get("/", async (req, res) => {
   const paints = await prisma.paint.findMany({
-    // where: { isReceived: true },
+    where: { isReceived: true },
     include: { category: true },
   });
   return res.send(paints);
