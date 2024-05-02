@@ -24,6 +24,7 @@ model Category {
   id     String  @id @default(cuid())
   name   String
   paints Paint[]
+  Order  Order[]
 }
 
 model Paint {
@@ -38,4 +39,14 @@ model Paint {
   batchName      String
   bestBeforeDate DateTime
   categoryId     String
+}
+
+model Order {
+  id           String   @id @default(cuid())
+  name         String
+  category     Category @relation(fields: [categoryId], references: [id])
+  quantity     Int
+  price        Float
+  supplierInfo String
+  categoryId   String
 }
