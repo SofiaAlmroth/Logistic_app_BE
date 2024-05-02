@@ -1,11 +1,16 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { validate } from "../schemas/User";
+import { validate, validateUpdatedUser } from "../schemas/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 const router = express.Router();
+
+router.get("/", async (req, res) => {
+  const users = await prisma.user.findMany();
+  return res.send(users);
+});
 
 router.post("/", async (req, res) => {
   const validation = validate(req.body);
@@ -25,7 +30,7 @@ router.post("/", async (req, res) => {
     data: {
       name: req.body.name,
       email: req.body.email,
-      password: password,
+      password,
     },
   });
 
@@ -37,6 +42,38 @@ router.post("/", async (req, res) => {
     .header("access-control-expose-headers", "x-auth-token")
     .header("x-auth-token", token)
     .send(userWithoutPassword);
+});
+
+router.put("/:id", async (req, res) => {
+  const validation = validateUpdatedUser(req.body);
+
+  const user = await prisma.user.findFirst({ where: { id: req.params.id } });
+
+  if (!validation.success)
+    return res.status(400).send(validation.error.issues[0].message);
+
+  if (!user)
+    return res.status(404).send("The user with the given id was not found");
+
+  const password = req.body.password
+    ? bcrypt.hashSync(req.body.password, 12)
+    : undefined;
+
+  console.log("req.body", req.body);
+
+  const updatedUser = await prisma.user.update({
+    where: { id: req.params.id },
+    data: {
+      name: req.body.name,
+      email: req.body.email,
+      password,
+      isAdmin: req.body.isAdmin,
+    },
+  });
+
+  const { password: p, ...userWithoutPassword } = updatedUser;
+
+  return res.send(userWithoutPassword);
 });
 
 export default router;

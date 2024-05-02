@@ -14,10 +14,11 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
-  email    String @unique
+  email    String  @unique
   password String
+  isAdmin  Boolean @default(false)
 }
 
 model Category {
@@ -34,11 +35,27 @@ model Paint {
   quantity       Int
   price          Float
   supplierInfo   String
-  orderDate      DateTime
-  ean_gtin       String
-  batchName      String
+  orderDate      DateTime @default(now())
+  ean_gtin       String   @default(cuid())
   bestBeforeDate DateTime
   categoryId     String
+  Order          Order?   @relation(fields: [orderId], references: [id])
+  orderId        String?
+  isReceived     Boolean  @default(false)
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  number    Int      @default(autoincrement())
+  status    Status   @default(PENDING)
+  rows      Paint[]
+  orderDate DateTime @default(now())
+}
+
+enum Status {
+  PENDING
+  IN_TRANSIT
+  RECEIVED
 }
 
 model Order {
