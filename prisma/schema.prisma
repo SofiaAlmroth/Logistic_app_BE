@@ -38,4 +38,21 @@ model Paint {
   ean_gtin       String   @default(cuid())
   bestBeforeDate DateTime
   categoryId     String
+  Order          Order?   @relation(fields: [orderId], references: [id])
+  orderId        String?
+  isReceived     Boolean  @default(false)
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  number    Int      @default(autoincrement())
+  status    Status   @default(PENDING)
+  rows      Paint[]
+  orderDate DateTime @default(now())
+}
+
+enum Status {
+  PENDING
+  IN_TRANSIT
+  RECEIVED
 }
