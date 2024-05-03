@@ -3,6 +3,7 @@ import paints from "./routes/paints";
 import users from "./routes/users";
 import auth from "./routes/auth";
 import orders from "./routes/orders";
+import sales from "./routes/sales";
 import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
@@ -17,6 +18,7 @@ app.use("/api/paints", paints);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/orders", orders);
+app.use("/api/sales", sales);
 
 app.listen(5999, () => console.log("listening on port 5999..."));
 
@@ -28,6 +30,15 @@ app.listen(5999, () => console.log("listening on port 5999..."));
 // }
 
 // createOrder();
+
+//GET Sales
+// async function createSaleOrder() {
+//   const saleOrder = await prisma.sale.create({});
+//   console.log("sales order created", saleOrder);
+//   return saleOrder;
+// }
+
+// createSaleOrder();
 
 // function date() {
 //   const bestBeforeDate = new Date();

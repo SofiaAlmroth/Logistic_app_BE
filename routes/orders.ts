@@ -72,6 +72,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { status } = req.body;
+
   const order = await prisma.order.findFirst({
     where: { id: req.params.id },
     include: { rows: true },
@@ -79,19 +80,9 @@ router.put("/:id", async (req, res) => {
   if (!order)
     return res.status(404).send("The order with the gived id was not found");
 
-  const rowIds = order.rows.map((row: Paint) => row.id);
-
   await prisma.order.update({
     where: { id: req.params.id },
-    data: {
-      status: status,
-      rows: {
-        updateMany: {
-          where: { id: { in: rowIds } },
-          data: { isReceived: status === "RECEIVED" },
-        },
-      },
-    },
+    data: { status: status },
   });
 
   const updatedOrder = await prisma.order.findFirst({
