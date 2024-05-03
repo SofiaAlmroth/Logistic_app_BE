@@ -6,12 +6,47 @@ const router = express.Router();
 
 //Hämta alla paints
 router.get("/", async (req, res) => {
+  // Hitta received orders och deras paint
+  const receivedOrders = await prisma.order.findMany({
+    where: { status: "RECEIVED" },
+    select: { rows: { select: { id: true } } },
+  });
+
+  //göra om till en array
+  const receivedPaints = receivedOrders.flatMap((order) =>
+    order.rows.map((row) => row.id)
+  );
+
+  // Hitta pending sales och deras paints
+  const pendingSales = await prisma.sale.findMany({
+    where: { status: "PENDING" },
+    select: { rows: { select: { id: true } } },
+  });
+
+  //göra om till en array
+  const pendingPaints = pendingSales.flatMap((sale) =>
+    sale.rows.map((row) => row.id)
+  );
+
+  // combinera received paints och pending paints
+  const allPaintsId = [...receivedPaints, ...pendingPaints];
+
+  // få ut alla paints i båda orders
   const paints = await prisma.paint.findMany({
-    where: { isReceived: true },
+    where: { id: { in: allPaintsId } },
     include: { category: true },
   });
+
   return res.send(paints);
 });
+
+// router.get("/", async (req, res) => {
+//   const paints = await prisma.order.findMany({
+//     where: { status: "RECEIVED" },
+//     select: { rows: true },
+//   });
+//   return res.send(paints);
+// });
 
 //hämta en paint med ett id
 router.get("/:id", async (req, res) => {

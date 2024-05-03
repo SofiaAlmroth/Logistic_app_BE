@@ -25,7 +25,6 @@ model Category {
   id     String  @id @default(cuid())
   name   String
   paints Paint[]
-  Order  Order[]
 }
 
 model Paint {
@@ -42,6 +41,7 @@ model Paint {
   Order          Order?   @relation(fields: [orderId], references: [id])
   orderId        String?
   isReceived     Boolean  @default(false)
+  Sale           Sale[]
 }
 
 model Order {
@@ -52,18 +52,22 @@ model Order {
   orderDate DateTime @default(now())
 }
 
+model Sale {
+  id        String     @id @default(cuid())
+  number    Int        @default(autoincrement())
+  status    SaleStatus @default(PENDING)
+  rows      Paint[]
+  orderDate DateTime   @default(now())
+}
+
 enum Status {
   PENDING
   IN_TRANSIT
   RECEIVED
 }
 
-model Order {
-  id           String   @id @default(cuid())
-  name         String
-  category     Category @relation(fields: [categoryId], references: [id])
-  quantity     Int
-  price        Float
-  supplierInfo String
-  categoryId   String
+enum SaleStatus {
+  PENDING
+  SENT
+  RECEIVED
 }
