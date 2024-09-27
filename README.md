@@ -56,12 +56,13 @@ The following routes are available through the API:
 : Update a paint by ID.
  -DELETE /api/paints/
 : Delete a paint by ID.
- -Environment Variables
 
+
+##Environment Variables
 To run this project, you will need to set the following environment variables in your .env file:
-
 ```env
 POSTGRES_PRISMA_URL="postgres://default:Ur0Qj2dyncfK@ep-plain-paper-a2hzqlin-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+JWT_SECRET="jwtSecretPass"
 PORT=5999
 ```
 
@@ -78,7 +79,7 @@ cd logistic_app_BE
 npm install
 ```
 
-## Set up PostgreSQL Database
+### Set up PostgreSQL Database
 Make sure you have PostgreSQL installed and running. Then, configure the database connection string in the .env file under the POSTGRES_PRISMA_URL variable.
 
 ### Run Prisma Migrations: Ensure your database is set up with the necessary schema by running:
